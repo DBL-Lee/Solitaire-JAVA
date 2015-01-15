@@ -20,7 +20,8 @@ public class SolitaireGame {
 		    for ( int cn=0 ; cn<13 ; cn++ ) {
 				talon.add( Card.getCard( s, cn+1));
 		    }
-		}		
+		}
+		
 		Pack.Shuffle(talon);
 		
 		//initialize tableau and foundation

@@ -5,7 +5,6 @@ package Solitaire;
  */
 import java.awt.*;
 
-import javax.swing.JComponent;
 
 public class Card {
 	// the directory where the card images are to be found
@@ -73,9 +72,8 @@ public class Card {
 		this.suit = s;
         }
 
-    // Draw the picture of a card onto a graphics context g, positioned at (x,y)
-    public void show( Graphics g, JComponent c, int x, int y) {
-    	g.drawImage( im, x, y, c);
+    public Image getImage(){
+    	return this.im;
     }
     
     public static double getHeight(){

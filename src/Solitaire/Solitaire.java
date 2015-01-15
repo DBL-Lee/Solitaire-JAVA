@@ -21,7 +21,8 @@ public class Solitaire extends JApplet {
 
     public static void main(String[] args) {
         
-        outerFrame = new JFrame( "Solitaire");            
+        outerFrame = new JFrame( "Solitaire");  
+        outerFrame.setResizable(false);
 		Solitaire innerFrame = new Solitaire(); 
 		buttonPanel = new JPanel(); 
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,30,0));

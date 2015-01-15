@@ -28,6 +28,10 @@ class CardTable extends JPanel {
     static int shiftX, shiftY, currentX, currentY;
     private Boolean cardDragged = false;
     
+    private void printCard( Graphics g, Card card, int x, int y){
+        g.drawImage( card.getImage(), x, y, this);
+    }
+    
 	public void paintComponent(Graphics g) {
 		super.paintComponent( g);
     	g.setColor( Color.green);
@@ -36,15 +40,15 @@ class CardTable extends JPanel {
     	Card outline = Card.getCardOutline();
     	
     	for ( int coln=0 ; coln<7 ; coln++ ) {
-    		if ( coln!=2 )  outline.show( g, this, Margin+coln*XShift, Margin);
-    		outline.show( g, this, Margin+coln*XShift, Margin+YShift);
+    		if ( coln!=2 )  printCard( g, outline, Margin+coln*XShift, Margin);
+    		printCard( g, outline, Margin+coln*XShift, Margin+YShift);
     	}
     	
     	// Print talon
     	if (game.talonEmpty()){
-    		Card.getEmptyTalon().show(g, this, Margin, Margin);
+    		printCard(g, Card.getEmptyTalon(), Margin, Margin);
     	}else{
-    		back.show(g, this, Margin, Margin);
+    		printCard(g, back, Margin, Margin);
     	}
     	
     	// Print foundation
@@ -52,7 +56,7 @@ class CardTable extends JPanel {
     		for (int row=0; row<game.numberOfCardsInFoundation(col);row++){
     			Card card = game.getCardInFoundation(col, row);
     			if (card!=null){
-    				card.show(g, this, Margin+XShift*(col+3), Margin);
+    				printCard(g, card, Margin+XShift*(col+3), Margin);
     			}
     		}
     	}
@@ -63,7 +67,7 @@ class CardTable extends JPanel {
         	for (int index=0;index<wastePileSize;index++){
         		Card card = game.getWastePileOfIndex(index);
         		if (card!=null){
-        			card.show(g,this,Margin+XShift+index%3*CardShift,Margin);
+        			printCard(g,card,Margin+XShift+index%3*CardShift,Margin);
         		}
         	}
 		} catch (Exception e) {
@@ -80,11 +84,11 @@ class CardTable extends JPanel {
 				}else{
 					if (card.isVisible()) {
 						//show front
-						card.show(g, this, Margin+col*XShift, Margin+YShift+CardShift*row);
+						printCard(g, card, Margin+col*XShift, Margin+YShift+CardShift*row);
 					}else {
 						//show back
-						back.show(g, this, Margin+col*XShift, Margin+YShift+CardShift*row);
-						outline.show(g, this, Margin+col*XShift, Margin+YShift+CardShift*row);
+						printCard(g, back, Margin+col*XShift, Margin+YShift+CardShift*row);
+						printCard(g, outline, Margin+col*XShift, Margin+YShift+CardShift*row);
 					} 
 				}
 	    	}
@@ -94,7 +98,7 @@ class CardTable extends JPanel {
 	    if(cardDragged){
 	    	List<Card> draggedCards = game.getDraggedCards();
 	    	for (int num=0; num<draggedCards.size();num++){
-	    		draggedCards.get(num).show(g, this, currentX-shiftX, currentY-shiftY+CardShift*num);
+	    		printCard(g, draggedCards.get(num), currentX-shiftX, currentY-shiftY+CardShift*num);
 	    	}
 	    }
 
@@ -144,7 +148,7 @@ class CardTable extends JPanel {
     	    				shiftY = y-Margin; 
     	    			}
     	    		}
-    	    	}else if ((x-Margin)%XShift<=Card.getWidth()){
+    	    	}else if ((x-Margin)%XShift<=Card.getWidth()&&((x-Margin)/XShift<7)){
     	    		int col=(x-Margin)/XShift;
     	    		//clicked in foundation
     	    		if (new Rectangle2D.Double(Margin+3*XShift, Margin, 4*XShift, Card.getHeight()).contains(x, y)) {
@@ -186,7 +190,7 @@ class CardTable extends JPanel {
     	    		// x,y is the centre of the card
     	    		int x = (int)Math.round(e.getX()-shiftX+Card.getWidth()/2), y= (int)Math.round(e.getY()-shiftY+Card.getHeight()/2);
     	    		//lies in a column
-    	    		if ((x-Margin)%XShift<=Card.getWidth()){
+    	    		if ((x-Margin)%XShift<=Card.getWidth()&&((x-Margin)/XShift<7)){
     	    			int col=(x-Margin)/XShift;
     	    			//lies in foundation area
     	    			if (new Rectangle2D.Double(Margin+3*XShift, Margin, 4*XShift, Card.getHeight()).contains(x, y)){
